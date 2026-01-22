@@ -21,10 +21,16 @@ public class WebSocketHandler extends TextWebSocketHandler {
         session.sendMessage(new TextMessage("CONNECTED : sessionID=" + session.getId()));
     }
 
+    // 클라이언트로부터 메시지가 도착하면 아래의 메서드가 호출됨...
     // 대화를 주고 받는
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        super.handleTextMessage(session, message);
+        String payload = message.getPayload();
+
+        log.debug("클라이언트가 전송한 메시지: {} ", payload);
+
+        // 서버는 클라이언트의 메시지를 다시 보내줘야 함...
+        session.sendMessage(new TextMessage(payload));
     }
 
     // 에러가 났을 때
